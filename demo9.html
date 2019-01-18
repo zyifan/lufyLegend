@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绘图 LGraphics，图片</title>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>  
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        var loader;
+        init(50, "mylegend", 500, 350, main);
+
+        function main(){
+           loader = new LLoader();
+           loader.addEventListener(LEvent.COMPLETE,loadBitmapData);
+           loader.load('./imgs/smalltree.png',"bitmapData");
+        }
+        function loadBitmapData(event){
+            var bitmapData = new LBitmapData(loader.content);
+            var backLayer = new LSprite();
+            addChild(backLayer);
+            // 将 LBitmapData 对象存储到 LGraphics 对象中
+            backLayer.graphics.beginBitmapFill(bitmapData);
+            // 绘制一个圆形区域， LGraphics 对象会直接将存储在自己内部的 LBitmapData 对象透过这个原型区域显示出来
+            // backLayer.graphics.drawArc(1,'#000000',[110,80,50,0,Math.PI*2]);
+            
+            // 或使用矩形绘制图像
+            // backLayer.graphics.drawRect(1,'#000',[180,50,70,100]);
+
+             // 或使用多边形绘制图像
+            backLayer.graphics.drawVertices(1,'#000',[[120,50],[100,200],[200,150]]);
+        }
+    </script>
+</body>
+</html>

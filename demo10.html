@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绘图 LGraphics，扭曲图片</title>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>  
+    <!-- drawTriangles(vertices, indices, uvtData, thickness, color) -->
+    <!-- vertices：顶点坐标，由数字构成的矢量，其中每一对数字将被视为一个坐标位置（x，y）对，必需 -->
+    <!-- indices：定义三角形，每两个三角形是一个矩形，定义三角形的时候要以矩形的4个顶点为基准，三角形的顶点顺序分别是（左上，右上，左下）和（右上，左下，右下），由整数或索引构成的矢量，其中每 3 个索引定义一个三角形。如果 indexes参数为null，则每三个订单（vertices 矢量中的6对 x、y）定义一个三角形。否则，每个索引将引用一个顶点，即vertices矢量中的一对数字。例如，indexes[1]引用（vertices[2,vertices[3]]） -->
+    <!-- uvtData：定义每个顶点相对于整张图片的比例。由用于应用纹理映射的标准坐标构成矢量。每个坐标引用用于填充的位图上的一个点，每个顶点必须具有一个UV或一个UVT坐标。对于UV坐标，（0,0）是位图左上角，（1，1）是位图右下角 -->
+    <!-- thickness：分割完的三角形边框线宽 -->
+    <!-- color：分割完的三角形边框颜色 -->
+
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        var loader;
+        init(50, "mylegend", 500, 350, main);
+
+        function main(){
+           loader = new LLoader();
+           loader.addEventListener(LEvent.COMPLETE,loadBitmapData);
+           loader.load('./imgs/cat.jpg',"bitmapData");
+        }
+        function loadBitmapData(event){
+            var bitmapData = new LBitmapData(loader.content);
+            var backLayer = new LSprite();            
+            backLayer.x = 100;
+            backLayer.y = 100
+            addChild(backLayer);
+
+            vertices = new Array();
+            vertices.push(0,0);
+            vertices.push(0-50,120);//将原坐标的x坐标左移50，vertices.push(0,120)
+            vertices.push(0,240);
+            vertices.push(120,0);
+            vertices.push(120,120);
+            vertices.push(120,240);
+            vertices.push(240,0);
+            vertices.push(240+50,120);//将原坐标的x坐标右移50
+            vertices.push(240,240);
+
+            indices = new Array();
+            indices.push(0,3,1);
+            indices.push(3,1,4);
+            indices.push(1,4,2);
+            indices.push(4,2,5);
+            indices.push(3,6,4);
+            indices.push(6,4,7);
+            indices.push(4,7,5);
+            indices.push(7,5,8);
+
+            uvtData = new Array();
+            uvtData.push(0,0);
+            uvtData.push(0,0.5);
+            uvtData.push(0,1);
+            uvtData.push(0.5,0);
+            uvtData.push(0.5,0.5);
+            uvtData.push(0.5,1);
+            uvtData.push(1,0);
+            uvtData.push(1,0.5);
+            uvtData.push(1,1);
+
+            backLayer.graphics.beginBitmapFill(bitmapData);
+            backLayer.graphics.drawTriangles(vertices, indices, uvtData, 2, 'red');
+        }
+    </script>
+</body>
+</html>

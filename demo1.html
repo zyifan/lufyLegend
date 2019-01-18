@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图片的加载与显示</title>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>
+    <!-- 使用 LLoader 类加载图片数据 -->
+    <!-- 在读取完图片数据保存到 LBitmapData 中 -->
+    <!-- 利用 LBitmap 将图片显示到画板上 -->
+
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        var loader;
+        init(50, "mylegend", 500, 350, main);
+
+        function main(){
+            loader = new LLoader();
+            loader.addEventListener(LEvent.COMPLETE, loadBitmapdata);
+            loader.load("./imgs/smalltree.png","bitmapData");
+        }
+        function loadBitmapdata(event){
+            // loader.content 就是一个 Image 对象
+            // LBitmapData(image, x, y, width, height) 在图片的x、y位置截取width*height的图片显示
+            // 如果x，y，width，height省略不传，则默认显示整张图片
+            var bitmapdata = new LBitmapData(loader.content, 50, 50, 150, 150);
+            var bitmap = new LBitmap(bitmapdata);
+            addChild(bitmap);
+        }
+    </script>
+</body>
+</html>

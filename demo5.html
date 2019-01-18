@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>绘图 LGraphics，圆形</title>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>  
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        init(50, "mylegend", 500, 350, main);
+
+        function main(){
+            var graphics = new LGraphics();
+            addChild(graphics);
+            // drawArc(thickness, lineColor, pointArray, isfill, color)
+            // thickness 边框线宽， lineColor 边框颜色， pintArray[x,y,r,startAngle,endAngle,顺时针/逆时针]，isfill是否填充矩形， color填充颜色
+            graphics.drawArc(1,'#000000',[60,60,50,0,360*Math.PI/180]);
+            graphics.drawArc(1,'#000000',[180,60,50,0,360*Math.PI/180],true,'#cccccc');
+        }
+    </script>
+</body>
+</html>
