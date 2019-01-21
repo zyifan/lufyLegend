@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>鼠标事件</title>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        init(50, "mylegend", 300, 300, main);
+        var field;
+        function main(){
+            var layer = new LSprite();
+            layer.graphics.drawRect(1,'#ccc',[0,0,300,300],true,'#ccc');
+            addChild(layer);
+            field = new LTextField();
+            field.text = 'Wait Click!';
+            layer.addChild(field);
+            layer.addEventListener(LMouseEvent.MOUSE_DOWN,downshow);
+            layer.addEventListener(LMouseEvent.MOUSE_UP,upshow)
+        }
+        function upshow(){
+            field.text = 'Mouse Up!'
+        }
+        function downshow(){
+            field.text = 'Mouse Down!';
+        }
+    </script>
+</body>
+</html>

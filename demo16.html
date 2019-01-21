@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>按钮</title>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>
+    <!-- LButton(DisplayObject_up, DisplayObject_over) -->
+    <!-- DisplayObject_up 代表按钮默认up状态的对象，当鼠标不在按钮上，按钮就处于这个状态 -->
+    <!-- DisplayObject_over 代表鼠标移动到按钮上时按钮状态，鼠标离开时恢复到up状态-->
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        init(50, "mylegend", 300, 300, main);
+        var loader,bitmapup,bitmapover,field;
+        function main(){
+            loader = new LLoader();
+            loader.addEventListener(LEvent.COMPILE,loadUp);
+            loader.load('./imgs/up.png','bitmapData');
+        }
+        function loadUp(event){
+            
+        }
+    </script>
+</body>
+</html>
