@@ -15,24 +15,53 @@
     <!-- list =  LGlobal.divideCoordinate(imgWidth,imgHeight,rowNum,colNum) -->
     <div id="mylegend">loading...</div>
     <script type="text/javascript">
-        var loader,anime,layer;
-        init(200, "mylegend", 500, 350, main);
+        var loader, anime ,layer;
+        LInit(200, "mylegend", 800, 450, main);
         function main(){
             loader = new LLoader();
-            loader.addEventListener(LEvent.COMPLETE,main);
+            loader.addEventListener(LEvent.COMPLETE,loadBitmapData);
             loader.load('./imgs/player.png','bitmapData');
         }
-        function main(event){
+        function loadBitmapData(event){
             var bitmapData = new LBitmapData(loader.content,0,0,64,64);
-            var list = LGlobal.divideCoordinate(256,256,4,4);
+            var list = LGlobal.divideCoordinate(480,630,3,4);
             // 加入层LSprite
             layer = new LSprite();
+            layer.x = 300;
             addChild(layer);
             anime = new LAnimation(layer, bitmapData, list);
             //LEvent.ENTER_FRAME [播放事件] 播放头进入新帧时调度
             layer.addEventListener(LEvent.ENTER_FRAME,onframe);
         }      
         function onframe(){
+            // 获取当前播放的贞动画的属性:[rowIndex,colIndex,mode,isMirror]
+            var action = anime.getAction();
+            // switch rowIndex
+            switch(action[0]){
+                // 第0行
+                case 0:{
+                    layer.y +=5;
+                    if(layer.y >=250){
+                        anime.setAction(1);
+                    }
+                    break;
+                }
+                // 第1行
+                case 1:{
+                    layer.y -=5;
+                    if(layer.y <=0){
+                        anime.setAction(2);
+                    }
+                    break;
+                }
+                case 2:{
+                    layer.x -=5;
+                    if(layer.x <=0){
+                        anime.setAction(0);
+                    }
+                    break;
+                }
+            }
             // 播放下一贞动画，将所播放的图片的列号加1
             anime.onframe();
         }
