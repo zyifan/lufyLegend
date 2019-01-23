@@ -11,44 +11,30 @@
     <script src="./lufylegend-1.10.1.min.js"></script>
 </head>
 <body>
-    <!-- LButton(DisplayObject_up, DisplayObject_over) -->
-    <!-- DisplayObject_up 代表按钮默认up状态的对象，当鼠标不在按钮上，按钮就处于这个状态 -->
-    <!-- DisplayObject_over 代表鼠标移动到按钮上时按钮状态，鼠标离开时恢复到up状态-->
+    <!-- LAnimation(layer,bitmapData,list) -->
+    <!-- list =  LGlobal.divideCoordinate(imgWidth,imgHeight,rowNum,colNum) -->
     <div id="mylegend">loading...</div>
     <script type="text/javascript">
-        init(50, "mylegend", 300, 300, main);
-        var loader,bitmapup,bitmapover,field;
+        var loader,anime,layer;
+        init(200, "mylegend", 500, 350, main);
         function main(){
             loader = new LLoader();
-            loader.addEventListener(LEvent.COMPLETE,loadUp);
-            loader.load('./imgs/btn.png','bitmapData');
+            loader.addEventListener(LEvent.COMPLETE,main);
+            loader.load('./imgs/player.png','bitmapData');
         }
-        function loadUp(event){
-            var ld = new LBitmapData(loader.content);
-            bitmapup = new LBitmap(ld); 
-            bitmapup.scaleX = 0.2   
-            bitmapup.scaleY = 0.2            
-            loader = new LLoader();
-            loader.addEventListener(LEvent.COMPLETE,loadOver);
-            loader.load('./imgs/btn1.png','bitmapData');
-        }
-        function loadOver(event){
-            var rd = new LBitmapData(loader.content);
-            bitmapover = new LBitmap(rd);  
-            bitmapover.scaleX = 0.2    
-            bitmapover.scaleY = 0.2              
-            var layer = new LSprite();
+        function main(event){
+            var bitmapData = new LBitmapData(loader.content,0,0,64,64);
+            var list = LGlobal.divideCoordinate(256,256,4,4);
+            // 加入层LSprite
+            layer = new LSprite();
             addChild(layer);
-            field = new LTextField();
-            field.text = 'Wait Click!';
-            layer.addChild(field);
-            var testButton = new LButton(bitmapup,bitmapover);
-            testButton.y = 50;
-            layer.addChild(testButton);
-            testButton.addEventListener(LMouseEvent.MOUSE_DOWN,downshow);
-        }
-        function downshow(event){
-            field.text = "textButton Click!";
+            anime = new LAnimation(layer, bitmapData, list);
+            //LEvent.ENTER_FRAME [播放事件] 播放头进入新帧时调度
+            layer.addEventListener(LEvent.ENTER_FRAME,onframe);
+        }      
+        function onframe(){
+            // 播放下一贞动画，将所播放的图片的列号加1
+            anime.onframe();
         }
     </script>
 </body>
