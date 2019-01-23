@@ -20,11 +20,35 @@
         var loader,bitmapup,bitmapover,field;
         function main(){
             loader = new LLoader();
-            loader.addEventListener(LEvent.COMPILE,loadUp);
-            loader.load('./imgs/up.png','bitmapData');
+            loader.addEventListener(LEvent.COMPLETE,loadUp);
+            loader.load('./imgs/btn.png','bitmapData');
         }
         function loadUp(event){
-            
+            var ld = new LBitmapData(loader.content);
+            bitmapup = new LBitmap(ld); 
+            bitmapup.scaleX = 0.2   
+            bitmapup.scaleY = 0.2            
+            loader = new LLoader();
+            loader.addEventListener(LEvent.COMPLETE,loadOver);
+            loader.load('./imgs/btn1.png','bitmapData');
+        }
+        function loadOver(event){
+            var rd = new LBitmapData(loader.content);
+            bitmapover = new LBitmap(rd);  
+            bitmapover.scaleX = 0.2    
+            bitmapover.scaleY = 0.2              
+            var layer = new LSprite();
+            addChild(layer);
+            field = new LTextField();
+            field.text = 'Wait Click!';
+            layer.addChild(field);
+            var testButton = new LButton(bitmapup,bitmapover);
+            testButton.y = 50;
+            layer.addChild(testButton);
+            testButton.addEventListener(LMouseEvent.MOUSE_DOWN,downshow);
+        }
+        function downshow(event){
+            field.text = "textButton Click!";
         }
     </script>
 </body>
