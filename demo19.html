@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>俄罗斯方块游戏</title>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>
+    <!-- LLoadManage.load($list, $onupdate, $oncomplete) -->
+    <!-- $list 图片数组，$onupdate没读取一张图片后的回调函数， $oncomplete所有的都读完的回调函数 -->
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        // 进度条显示层，背景层，方块绘制层，方块预览层
+        var loadingLayer, backLayer, graphicsMap, nextLayer; 
+        LInit(50, "mylegend", 800, 400, main);
+        function main(){
+            backLayer = new LSprite();
+            backLayer.graphics.drawRect(1, '#000', [0,0,320,480], true, '#000');
+            addChild(backLayer);
+            gameInit();        
+        }
+
+        // 读取完所有图片，进行游戏标题画面的初始工作
+        function gameInit(){
+            // 显示游戏标题
+            var title = new LTextField();
+            title.x = 50;
+            title.y = 100;
+            title.size = 30;
+            title.color = '#fff';
+            title.text = '俄罗斯方块';
+            backLayer.addChild(title);
+            // 显示说明文字
+            backLayer.graphics.drawRect(1,'#fff',[50,240,220,40]);
+            var textClick = new LTextField();
+            textClick.size = 18;
+            textClick.color = '#fff';
+            textClick.text = '点击页面开始游戏';
+            textClick.x = (LGlobal.width - textClick.getWidth())/2;
+            textClick.y = 245;
+            backLayer.addChild(textClick)
+        }
+    </script>
+</body>
+</html>

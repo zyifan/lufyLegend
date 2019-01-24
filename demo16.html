@@ -22,22 +22,18 @@
         function main(){
             loader = new LLoader();
             loader.addEventListener(LEvent.COMPLETE,loadUp);
-            loader.load('./imgs/btn.png','bitmapData');
+            loader.load('./imgs/up.png','bitmapData');
         }
         function loadUp(event){
             var ld = new LBitmapData(loader.content);
-            bitmapup = new LBitmap(ld); 
-            bitmapup.scaleX = 0.2   
-            bitmapup.scaleY = 0.2            
+            bitmapup = new LBitmap(ld);          
             loader = new LLoader();
             loader.addEventListener(LEvent.COMPLETE,loadOver);
-            loader.load('./imgs/btn1.png','bitmapData');
+            loader.load('./imgs/over.png','bitmapData');
         }
         function loadOver(event){
             var rd = new LBitmapData(loader.content);
-            bitmapover = new LBitmap(rd);  
-            bitmapover.scaleX = 0.2    
-            bitmapover.scaleY = 0.2              
+            bitmapover = new LBitmap(rd);              
             var layer = new LSprite();
             addChild(layer);
             field = new LTextField();
