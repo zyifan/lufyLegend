@@ -163,6 +163,7 @@ function onframe(){
 		addStage();
 	}
 	if(!hero)return;
+	// found 游戏主角是否已经落到地板上
 	var key = null,found = false;
 	hero.isJump = true;
 	for(key in stageLayer.childList){
