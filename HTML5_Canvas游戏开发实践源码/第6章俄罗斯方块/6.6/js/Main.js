@@ -461,12 +461,14 @@ function checkPlus(nx, ny) {
 			if (i + pointBox.y + ny < 0) {
 				continue;
 			} else if (i + pointBox.y + ny >= map.length || j + pointBox.x + nx < 0 || j + pointBox.x + nx >= map[0].length) {
+				// 临界
 				if (nowBox[i][j] == 0) {
 					continue;
 				} else {
 					return false;
 				}
 			}
+			// 遇到方块
 			if (nowBox[i][j] > 0 && map[i + pointBox.y + ny][j + pointBox.x + nx] > 0) {
 				return false;
 			}
@@ -484,8 +486,8 @@ function minusBox() {
 				continue;
 			}
 			// 将当前方块对应的网格方块恢复初始状态
-			map[i + pointBox.y][j + pointBox.x] = map[i + pointBox.y][j + pointBox.x] - nowBox[i][j];
-			nodeList[i + pointBox.y][j + pointBox.x]["index"] = map[i + pointBox.y][j + pointBox.x] - 1;
+			map[i + pointBox.y][j + pointBox.x] = map[i + pointBox.y][j + pointBox.x] - nowBox[i][j];//0
+			nodeList[i + pointBox.y][j + pointBox.x]["index"] = map[i + pointBox.y][j + pointBox.x] - 1;//-1
 		}
 	}
 }
@@ -510,6 +512,7 @@ function getNewBox() {
 		nextBox = BOX.getBox();
 	}
 	nowBox = nextBox;
+	// x、y起始位置的行数、列数
 	pointBox.x = 3;
 	pointBox.y = -4;
 	nextBox = BOX.getBox();
