@@ -19,6 +19,8 @@ Floor.prototype.onframe = function (){
 	}
 };
 Floor.prototype.hitRun = function (){};
+
+// 子类
 function Floor01(){
 	base(this,Floor,[]);
 }
@@ -27,6 +29,8 @@ Floor01.prototype.setView = function(){
 	self.bitmap = new LBitmap(new LBitmapData(imglist["floor0"]));
 	self.addChild(self.bitmap);
 }
+
+// 冰板
 function Floor02(){
 	base(this,Floor,[]);
 	var self = this;
@@ -42,11 +46,15 @@ Floor02.prototype.hitRun = function (){
 	self.callParent("hitRun",arguments);
 	self.ctrlIndex++;
 	if(self.ctrlIndex >= 40){
+		// 40帧冰板消失
 		self.parent.removeChild(this);
 	}else if(self.ctrlIndex == 20){
+		// 20帧显示另一个冰板图片
 		self.bitmap.bitmapData.setCoordinate(100,0);
 	}
 }
+
+// 钉板
 function Floor03(){
 	base(this,Floor,[]);
 	this.hit = false;
@@ -64,6 +72,8 @@ Floor03.prototype.hitRun = function (){
 	self.hit = true;
 	self.child.hp -= 1;
 }
+
+// 弹板
 function Floor04(){
 	base(this,Floor,[]);
 	var self = this;
@@ -92,6 +102,7 @@ Floor04.prototype.hitRun = function (){
 	self.bitmap.bitmapData.setCoordinate(100,0);
 }
 
+// 右滚轮
 function Floor05(){
 	base(this,Floor,[]);
 }
@@ -115,6 +126,8 @@ Floor05.prototype.hitRun = function (){
 	self.callParent("hitRun",arguments);
 	self.child.x += (MOVE_STEP-1);
 }
+
+// 左滚轮
 function Floor06(){
 	base(this,Floor,[]);
 }

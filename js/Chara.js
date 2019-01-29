@@ -5,8 +5,8 @@ function Chara(){
 	var data = new LBitmapData(imglist["hero"],0,0,40,50);
 	self.moveType = null;
 	self._charaOld = self.y;
-	self.hp = 3;
-	self.maxHp = 3;
+	self.hp = 3;//当前生命值
+	self.maxHp = 3;//初始生命值
 	self.hpCtrl = 0;
 	self.isJump = true;
 	self.index = 0;
@@ -22,9 +22,13 @@ function Chara(){
 Chara.prototype.onframe = function (){
 	var self = this;
 	self._charaOld = self.y;
+	// 向下移动
 	self.y += self.speed;
+	// speed增加
 	self.speed += g;
 	if(self.speed>20)self.speed=20;
+
+	// y轴边界处理
 	if(self.y > LGlobal.height){
 		self.hp = 0;
 	}else if(self.y < 10){
@@ -32,17 +36,25 @@ Chara.prototype.onframe = function (){
 		self.y += 20;
 		if(self.speed < 0)self.speed=0;
 	}
+
+	// 移动类型
 	if(self.moveType == "left"){
 		self.x -= MOVE_STEP;
 	}else if(self.moveType == "right"){
 		self.x += MOVE_STEP;
 	}
+
+	// x轴边界处理
 	if(self.x  < -10){
 		self.x = -10;
 	}else if(self.x > LGlobal.width - 30){
 		self.x = LGlobal.width - 30;
 	}
+
+	// 生命值处理
 	self.addHp();
+
+	// 每10帧切换一下人物动作动画
 	if(self.index-- > 0){
 		return;
 	}
@@ -51,8 +63,11 @@ Chara.prototype.onframe = function (){
 };
 Chara.prototype.addHp = function(){
 	var self = this;
+	// 如果生命值减少了
 	if(self.hp < self.maxHp){
+		// hpCtrl 加上STAGE_STEP
 		self.hpCtrl += STAGE_STEP;
+		// 如果hpCtrl的值大于等于两倍的高度，则增加生命值
 		if(self.hpCtrl >= LGlobal.height*2){
 			self.hpCtrl= 0;
 			self.hp++;
