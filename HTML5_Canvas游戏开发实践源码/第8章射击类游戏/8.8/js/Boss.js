@@ -14,6 +14,7 @@ Boss.prototype.onframe = function (){
 	self.callParent("onframe",arguments);
 	if(self.isdie || self.hp <= 0)gameClear();
 };
+// boss移除屏幕后，会对move数组的前两个元素的值重新复制，而不是删除，所以敌机boss永远不会移除游戏画面
 Boss.prototype.whenOut = function (){
 	var self = this;
 	if(self.x < 400){

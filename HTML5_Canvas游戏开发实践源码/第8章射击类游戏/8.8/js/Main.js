@@ -28,6 +28,9 @@ var imglist;
 var barrageSpeed = 10;
 
 var player;
+// 添加敌机以及控制敌机出现事件
+// ctrlList 出现在画面中的敌机列表， frames控制敌机出现的时间，bullet子弹在bulletLIst中的序号
+// move控制敌机 移动的数组，img敌机图片，x/y敌机坐标，hp生命值，isboss是否是敌机的boss
 var ctrlIndex = 0;
 var ctrlList=[
 {"frames":10,"bullet":4,"move":[-1,1,-1,-1],img:"enemy1",x:800,y:0,hp:3,isboss:false},
@@ -106,6 +109,7 @@ function gameInit(result){
 	hpText.x = hpText.y = 10;
 	textLayer.addChild(hpText);
 	
+	// 初始化一架飞机，并添加到飞机层上
 	var bitmapData = new LBitmapData(imglist["player"]);
 	player = new Player(100,150,bitmapData.width,bitmapData.height*0.5,bitmapData,30);
 	plainLayer.addChild(player);
@@ -122,6 +126,7 @@ function gameInit(result){
  * */
 function onframe(){
 	var key;
+	// 循环飞机层上的所有飞机，调用飞机的帧方法
 	for(key in plainLayer.childList){
 		plainLayer.childList[key].onframe();
 	}
@@ -134,31 +139,50 @@ function onframe(){
 	
 	setObject();
 	showText();
+	
+	// 判断是否是射击状态
 	if(!player.canshoot)return;
+	// 飞机向左移动
 	if(player.x - player.downX > mouseNowX - mouseStartX){
 		player.x -= MOVE_STEP;
+		// 如果飞机移动距离MOVE_STEP大于鼠标移动距离，则飞机移动距离等于鼠标移动距离
 		if(player.x - player.downX < mouseNowX - mouseStartX){
 			player.x = mouseNowX - mouseStartX + player.downX;
 		}
+	// 飞机向右移动
 	}else if(player.x - player.downX < mouseNowX - mouseStartX){
 		player.x += MOVE_STEP;
+		// 如果飞机移动距离MOVE_STEP大于鼠标移动距离，则飞机移动距离等于鼠标移动距离
 		if(player.x - player.downX > mouseNowX - mouseStartX){
 			player.x = mouseNowX - mouseStartX + player.downX;
 		}
 	}
+	// 向上移动
 	if(player.y - player.downY > mouseNowY - mouseStartY){
 		player.y -= MOVE_STEP;
 		if(player.y - player.downY < mouseNowY - mouseStartY){
 			player.y = mouseNowY - mouseStartY + player.downY;
 		}
+	// 向下移动
 	}else if(player.y - player.downY < mouseNowY - mouseStartY){
 		player.y += MOVE_STEP;
 		if(player.y - player.downY > mouseNowY - mouseStartY){
 			player.y = mouseNowY - mouseStartY + player.downY;
 		}
 	}
+	// 飞机边界判断，超出边界则重置位置，并存储鼠标的起始坐标、存储飞机的起始坐标
 	if(player.x < 0){
 		player.x = 0;
+		setCoordinate(mouseNowX,mouseNowY);
+	}else if(player.x + player.getWidth() > LGlobal.width){
+		player.x = LGlobal.width - player.getWidth();
+		setCoordinate(mouseNowX,mouseNowY);
+	}
+	if(player.y < 0){
+		player.y = 0;
+		setCoordinate(mouseNowX,mouseNowY);
+	}else if(player.y + player.getHeight() > LGlobal.height){
+		player.y = LGlobal.height - player.getHeight();
 		setCoordinate(mouseNowX,mouseNowY);
 	}
 }
@@ -202,18 +226,22 @@ function gameOver(){
 }
 
 function setObject(){
+	// 每10帧执行一次
 	if(frame++ < 10)return;
 	frame = 0;
 	frames++;
+	// 每50帧，就往bulletCtrlLayer添加一个弹药1或2
 	if(frames % 50 == 0){
-		var bulletIndex = Math.random()>0.5?1:2;
+		var bulletIndex = Math.random()>0.5?1:2;//1、2
 		var obj = new BulletCtrl({
 			x:790,y:100+Math.random()*200,xspeed:-1,yspeed:0,
-			bulletIndex:bulletIndex,bitmapData:new LBitmapData(imglist["item"+bulletIndex])
+			bulletIndex:bulletIndex,
+			bitmapData:new LBitmapData(imglist["item"+bulletIndex])
 		});
 		bulletCtrlLayer.addChild(obj);
 	}
 	var ctrlObject = ctrlList[ctrlIndex];
+	// 只有当frames与当前取得的敌机出现的时间一致，才能进行添加敌机的操作
 	if(ctrlObject["frames"] == frames){
 		ctrlIndex++;
 		
@@ -227,26 +255,32 @@ function setObject(){
 		plainLayer.addChild(enemy);
 		enemy.setBullet(ctrlObject.bullet);
 		enemy.move = ctrlObject.move;
-		enemy.canshoot=true;
+		enemy.canshoot = true;
 	}
 }
 var mouseStartX,mouseStartY,mouseNowX,mouseNowY;
 var MOVE_STEP = 5;
+
+// 鼠标按下事件
 function ondown(event){
+	// 开始射击
 	player.canshoot=true;
 	setCoordinate(event.offsetX,event.offsetY);
 }
+// 鼠标按下时存储鼠标的起始坐标、存储飞机的起始坐标
 function setCoordinate(x,y){
 	mouseStartX = mouseNowX = x;
 	mouseStartY = mouseNowY = y;
 	player.downX = player.x;
 	player.downY = player.y;
 }
+// 首先判断是否可移动，如果为true，则存储当前坐标
 function onmove(event){
 	if(!player.canshoot)return;
 	mouseNowX=event.offsetX;
 	mouseNowY = event.offsetY;
 }
+// 鼠标弹起时，停止射击和移动
 function onup(event){
 	player.canshoot=false;
 }

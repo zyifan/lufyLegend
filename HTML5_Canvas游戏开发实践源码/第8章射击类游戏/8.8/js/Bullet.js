@@ -10,7 +10,9 @@ function Bullet(params){
 	//xy轴速度
 	self.xspeed = params.xspeed;
 	self.yspeed = params.yspeed;
+	// 区分子弹是敌机的还是我机发出的
 	self.belong = params.belong;
+	// 子弹是否可以从屏幕移除
 	self.isdie = false;
 	//子弹图片
 	self.bitmap = new LBitmap(params.bitmapData);
@@ -42,7 +44,7 @@ Bullet.prototype.onframe = function (){
 			if(player.objectindex != plain.objectindex && LGlobal.hitTestArc(self,plain)){
 				plain.hp--;
 				self.isdie=true;
-				self.bitmap.bitmapData = new LBitmapData(imglist["remove"]);
+				self.bitmap.bitmapData = new LBitmapData(imglist["remove"]);//替换为爆炸图片
 				self.bitmap.x = -self.bitmap.getWidth() * 0.5;
 				self.bitmap.y = -self.bitmap.getHeight() * 0.5;
 			}
@@ -59,6 +61,7 @@ Bullet.prototype.onframe = function (){
 };
 
 Bullet.prototype.removeRun = function (){
+	// 将爆炸图片逐渐变大，逐渐变淡，当图片透明度为0时，将爆炸子弹移除
 	var self = this;
 	if(self.alpha <= 0){
 		bulletLayer.removeChild(self);

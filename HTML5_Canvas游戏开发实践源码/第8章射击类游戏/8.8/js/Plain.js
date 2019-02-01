@@ -20,6 +20,7 @@ function Plain(x,y,shootX,shootY,bitmapData,hp){
 	self.hp = hp;
 	//飞机是否死亡
 	self.isdie=false;
+	self.shoopIndex = 0;
 	//将飞机显示到画面上
 	self.bitmap = new LBitmap(bitmapData);
 	self.addChild(self.bitmap);
@@ -42,6 +43,7 @@ Plain.prototype.onframe = function (){
 Plain.prototype.shoot = function (){
 	var self = this;
 	var bullet = bulletList[self.bullet];
+	// 控制子弹发射频率，每step次发射一回
 	if(self.shoopIndex++ < bullet.step)return;
 	self.shoopIndex=0;
 	//开始发射
@@ -64,6 +66,7 @@ Plain.prototype.shoot = function (){
 		bulletLayer.addChild(obj);
 	}
 };
+// 设定子弹
 Plain.prototype.setBullet = function (bulletIndex){
 	this.bullet=bulletIndex;
 };
