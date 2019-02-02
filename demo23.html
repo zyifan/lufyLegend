@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>box2dWeb demo2</title>
+    <script src="./Box2dWeb-2.1.a.3.min.js"></script>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>
+    <!-- LLoadManage.load($list, $onupdate, $oncomplete) -->
+    <!-- $list 图片数组，$onupdate没读取一张图片后的回调函数， $oncomplete所有的都读完的回调函数 -->
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        init(10,"mylegend",600,400,main,LEvent.INIT);
+        var backLayer,cLayer,bitmap;        
+        var imglist = {};
+        var imgData = new Array({
+            name:'face',path:'./imgs/face.jpg'
+        })
+        function main(){	
+            // 打开debug模式
+	        LGlobal.setDebug(true);	
+            //游戏主层初始化
+            backLayer = new LSprite();
+            backLayer.graphics.drawRect(0,'#000',[0,0,600,400],false);
+            addChild(backLayer);
+            LLoadManage.load(imgData,null,gameInit);
+        }
+        function gameInit(result){
+            imglist = result;
+
+            // 初始化box2d
+            LGlobal.box2d = new LBox2d();
+            cLayer = new LSprite();
+            cLayer.x = 300;
+            cLayer.y = 390;
+            backLayer.addChild(cLayer);
+
+            // 添加静态物体，作为地板
+		    // addBodyPolygon（width，height，type，density，friction，restitution）
+		    // width、height 宽高，type 静态或动态，density 密度，friction 摩擦力，restitution 弹力    
+            cLayer.addBodyPolygon(600, 10, 0, 5, 0.4, 0.2);
+            
+            // 加入一个动态物体，这个物体会掉落到地板上
+            // 如果没有地板，动态物体会一直做自由落体下落
+            cLayer = new LSprite();
+            cLayer.x = 300;
+            cLayer.y = 100;
+            backLayer.addChild(cLayer);
+            bitmap = new LBitmap(new LBitmapData(imglist['face'],50,50,100,120));
+            cLayer.addChild(bitmap);
+            cLayer.addBodyPolygon(100, 120, 1, 5, 0.4, 0.2);
+        }
+    </script>
+</body>
+</html>

@@ -38,6 +38,7 @@ Bullet.prototype.onframe = function (){
 		bulletLayer.removeChild(self);
 	}
 	var key,plain;
+	// 自己的子弹跟敌机相撞
 	if(self.belong == player.belong){
 		for(key in plainLayer.childList){
 			plain = plainLayer.childList[key];
@@ -50,6 +51,7 @@ Bullet.prototype.onframe = function (){
 			}
 		}
 	}else{
+		// 子弹跟我机相撞
 		if(LGlobal.hitTestArc(self,player)){
 			player.hp--;
 			self.isdie=true;

@@ -98,18 +98,22 @@ function gameInit(result){
 	
 	plainLayer = new LSprite();
 	gameLayer.addChild(plainLayer);
+
 	bulletLayer = new LSprite();
 	gameLayer.addChild(bulletLayer);
+
 	bulletCtrlLayer = new LSprite();
 	gameLayer.addChild(bulletCtrlLayer);
+
 	textLayer = new LSprite();
 	gameLayer.addChild(textLayer);
+
 	hpText = new LTextField();
 	hpText.color="#ffffff";
 	hpText.x = hpText.y = 10;
 	textLayer.addChild(hpText);
 	
-	// 初始化一架飞机，并添加到飞机层上
+	// 初始化我方飞机，并添加到飞机层上
 	var bitmapData = new LBitmapData(imglist["player"]);
 	player = new Player(100,150,bitmapData.width,bitmapData.height*0.5,bitmapData,30);
 	plainLayer.addChild(player);
