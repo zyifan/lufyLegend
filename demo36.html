@@ -7,13 +7,14 @@
     <meta name="format-detection"content="telephone=no">
     <meta http-equiv="Cache-Control"content="no-cache"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>box2dWeb 方块</title>
+    <title>box2dWeb demo15 力</title>
     <script src="./Box2dWeb-2.1.a.3.min.js"></script>
     <script src="./lufylegend-1.10.1.min.js"></script>
 </head>
 <body>
-    <!-- LLoadManage.load($list, $onupdate, $oncomplete) -->
-    <!-- $list 图片数组，$onupdate没读取一张图片后的回调函数， $oncomplete所有的都读完的回调函数 -->
+    <!-- 力 -->
+    <!-- 每单击一次鼠标，就新建一个物体，并且给它加上一个冲力，把这个物体弹飞出去 -->
+    <!-- setWeldJoint(b2BodyDefA, b2BodyDefB)，参数物体A，物体B -->
     <div id="mylegend">loading...</div>
     <script type="text/javascript">
         init(10,"mylegend",600,400,main,LEvent.INIT);
@@ -23,27 +24,37 @@
 	        LGlobal.setDebug(true);	
             //游戏主层初始化
             backLayer = new LSprite();	
+            backLayer.graphics.drawRect(1,'#000',[0,0,600,400]);
             addChild(backLayer);
 
-            // 初始化box2d
+            // 地面
             LGlobal.box2d = new LBox2d();
             cLayer = new LSprite();
             cLayer.x = 300;
             cLayer.y = 390;
             backLayer.addChild(cLayer);
             // 添加静态物体，作为地板
-		    // addBodyPolygon（width，height，type，density，friction，restitution）
-		    // width、height 宽高，type 静态或动态，density 密度，friction 摩擦力，restitution 弹力    
             cLayer.addBodyPolygon(600, 10, 0, 5, 0.4, 0.2);
             
-            // 加入一个动态物体，这个物体会掉落到地板上
-            // 如果没有地板，动态物体会一直做自由落体下落
-            cLayer = new LSprite();
-            cLayer.x = 300;
-            cLayer.y = 100;
-            backLayer.addChild(cLayer);   
-            cLayer.addBodyPolygon(100, 60, 1, 5, 0.4, 0.2);            
+            backLayer.addEventListener(LMouseEvent.MOUSE_DOWN,createBox);
         }      
+
+        function createBox(event){
+            // 加入一个物体
+            var box01 = new LSprite();
+            box01.x = event.selfX;
+            box01.y = event.selfY;
+            backLayer.addChild(box01);
+            box01.addBodyCircle(30,0,0,1,1,.5,.6);
+            // 定义一个力的大小
+            var force = 500;
+            //定义一个方向，方向的冲量大小由上面定义的force来控制
+            var vec = new LGlobal.box2d.b2Vec2(force,-force);
+            // 给物体box01加上一个指定大小，指定方向的力ApplyForce（vec，point）
+            // GetWorldCenter 获取物体 box01 的中心点
+            // vec带有方向的冲量，point施加力的着力点
+            box01.box2dBody.ApplyForce(vec, box01.box2dBody.GetWorldCenter());
+        }
     </script>
 </body>
 </html>

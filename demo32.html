@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>box2dWeb demo11 关节</title>
+    <script src="./Box2dWeb-2.1.a.3.min.js"></script>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>
+    <!-- 移动关节 -->
+    <!-- 限制了两个物体的移动范围，即只能沿指定轴相对移动 -->
+    <!-- setPrismaticJoint(b2BodyDefA, b2BodyDefB, vec, limits, motors)，参数物体A，物体B -->
+    <!-- vec 物体A和物体B的相对移动方向，[x,y]，设置不同的比例，可以建立不同方向上的移动关节 -->
+    <!-- limits 表示移动的相对长度限制数组，[正向最大长度，反向最大长度]，可以限制两个物体相对移动的最大长度 -->
+    <!-- motors 马达数组，[正向力度，反向力度]，给移动关节添加一个持续的力 -->
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        init(10,"mylegend",600,400,main,LEvent.INIT);
+        var backLayer,cLayer;        
+        function main(){	
+            // 打开debug模式
+	        LGlobal.setDebug(true);	
+            //游戏主层初始化
+            backLayer = new LSprite();	
+            addChild(backLayer);
+
+            // 初始化box2d
+            LGlobal.box2d = new LBox2d();
+            cLayer = new LSprite();
+            cLayer.x = 300;
+            cLayer.y = 390;
+            backLayer.addChild(cLayer);
+            // 添加静态物体，作为地板
+            cLayer.addBodyPolygon(600, 10, 0, 5, 0.4, 0.2);
+            
+            // 加入一个动态物体1
+            box01 = new LSprite();
+            box01.x = 200;
+            box01.y = 100;
+            backLayer.addChild(box01);   
+            box01.addBodyCircle(20, 0, 0, 1, 1, 0.5, 0.6);
+            box01.setBodyMouseJoint(true);
+             
+            // 加入一个动态物体2
+            box02 = new LSprite();
+            box02.x = 200;
+            box02.y = 100;
+            backLayer.addChild(box02);
+            box02.addBodyCircle(20,0,0, 1,1,0.4,0.2);
+
+            // 加入一个滑轮关节
+            LGlobal.box2d.setPrismaticJoint(box01.box2dBody, box02.box2dBody, [0,1],[-5,2.5], [1,0]);
+        }      
+    </script>
+</body>
+</html>

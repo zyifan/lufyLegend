@@ -7,13 +7,14 @@
     <meta name="format-detection"content="telephone=no">
     <meta http-equiv="Cache-Control"content="no-cache"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>box2dWeb 方块</title>
+    <title>box2dWeb demo14 关节</title>
     <script src="./Box2dWeb-2.1.a.3.min.js"></script>
     <script src="./lufylegend-1.10.1.min.js"></script>
 </head>
 <body>
-    <!-- LLoadManage.load($list, $onupdate, $oncomplete) -->
-    <!-- $list 图片数组，$onupdate没读取一张图片后的回调函数， $oncomplete所有的都读完的回调函数 -->
+    <!-- 焊接关节 -->
+    <!-- 捆绑，将两个物体牢牢地绑在一起，使其成为一个物体 -->
+    <!-- setWeldJoint(b2BodyDefA, b2BodyDefB)，参数物体A，物体B -->
     <div id="mylegend">loading...</div>
     <script type="text/javascript">
         init(10,"mylegend",600,400,main,LEvent.INIT);
@@ -32,17 +33,26 @@
             cLayer.y = 390;
             backLayer.addChild(cLayer);
             // 添加静态物体，作为地板
-		    // addBodyPolygon（width，height，type，density，friction，restitution）
-		    // width、height 宽高，type 静态或动态，density 密度，friction 摩擦力，restitution 弹力    
             cLayer.addBodyPolygon(600, 10, 0, 5, 0.4, 0.2);
             
-            // 加入一个动态物体，这个物体会掉落到地板上
-            // 如果没有地板，动态物体会一直做自由落体下落
-            cLayer = new LSprite();
-            cLayer.x = 300;
-            cLayer.y = 100;
-            backLayer.addChild(cLayer);   
-            cLayer.addBodyPolygon(100, 60, 1, 5, 0.4, 0.2);            
+            // 加入一个动态物体1
+            box01 = new LSprite();
+            box01.x = 200;
+            box01.y = 100;
+            backLayer.addChild(box01);   
+            box01.addBodyCircle(50, 0,0, 1, 1, 0.4, 0.2);
+            box01.setBodyMouseJoint(true);          
+             
+            // 加入一个动态物体2
+            box02 = new LSprite();
+            box02.x = 250;
+            box02.y = 100;
+            backLayer.addChild(box02);
+            box02.addBodyCircle(50,0,0, 1,1,0.4,0.2);
+            box02.setBodyMouseJoint(true);            
+
+            // 加入一个焊接关节
+            LGlobal.box2d.setWeldJoint(box01.box2dBody,box02.box2dBody)
         }      
     </script>
 </body>

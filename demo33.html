@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="format-detection"content="telephone=no">
+    <meta http-equiv="Cache-Control"content="no-cache"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>box2dWeb demo12 关节</title>
+    <script src="./Box2dWeb-2.1.a.3.min.js"></script>
+    <script src="./lufylegend-1.10.1.min.js"></script>
+</head>
+<body>
+    <!-- 齿轮关节 -->
+    <!-- 结合了旋转关节和移动关节 -->
+    <!-- setGearJoint(b2BodyDefA, b2BodyDefB, ratio, revoluteJointDef, prismaticJointDef)，参数物体A，物体B -->
+    <!-- ratio 表示齿轮的比例系数，这个数值越小，物体A旋转一周使得物体B移动的距离也就越大，如果这个值设置的很大，那么物体A旋转几周才能使B移动 -->
+    <!-- revoluteJointDef 齿轮关节中的物体A和轴心所建立的旋转关节 -->
+    <!-- prismaticJointDef 齿轮关节中的物体B和齿轮所建立的移动关节 -->
+    <div id="mylegend">loading...</div>
+    <script type="text/javascript">
+        init(10,"mylegend",600,400,main,LEvent.INIT);
+        var backLayer,cLayer;        
+        function main(){	
+            // 打开debug模式
+	        LGlobal.setDebug(true);	
+            //游戏主层初始化
+            backLayer = new LSprite();	
+            addChild(backLayer);
+
+            // 初始化box2d
+            LGlobal.box2d = new LBox2d();
+            cLayer = new LSprite();
+            cLayer.x = 300;
+            cLayer.y = 390;
+            backLayer.addChild(cLayer);
+            // 添加静态物体，作为地板
+            cLayer.addBodyPolygon(600, 10, 0, 5, 0.4, 0.2);
+            
+            // 加入一个动态物体1
+            box01 = new LSprite();
+            box01.x = 200;
+            box01.y = 200;
+            backLayer.addChild(box01);   
+            box01.addBodyCircle(100, 0,0, 1, 1, 0.5, 0.6);
+            box01.setBodyMouseJoint(true);
+             
+            // 加入一个静态物体2
+            box02 = new LSprite();
+            box02.x = 200;
+            box02.y = 200;
+            backLayer.addChild(box02);
+            box02.addBodyCircle(20,0,0, 0,1,0.4,0.2);
+
+            // 加入一个动态物体3
+            box03 = new LSprite();
+            box03.x = 500;
+            box03.y = 200;
+            backLayer.addChild(box03);
+            box03.addBodyCircle(20,0,0, 1,1,0.5,0.6);
+            box03.setBodyMouseJoint(true);
+
+            // 在物体1和物体2之间建立旋转关节
+            var revoluteJoint = LGlobal.box2d.setRevoluteJoint(box02.box2dBody,box01.box2dBody);
+            // 在物体2和物体3之间建立移动关节
+            var prismaticJoint = LGlobal.box2d.setPrismaticJoint(box03.box2dBody,box02.box2dBody,[1,0,[-5,2.5],[1,0]])
+            // 利用建立好的旋转、移动关节，在物体1和物体3之间建立齿轮关节
+            LGlobal.box2d.setGearJoint(box01.box2dBody, box03.box2dBody, 2, revoluteJoint, prismaticJoint);
+        }      
+    </script>
+</body>
+</html>
